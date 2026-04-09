@@ -30,6 +30,10 @@
     @apply text-xl font-semibold text-white mb-3 mt-5;
   }
 
+  .prose-content h4 {
+    @apply text-lg font-semibold text-white mb-2 mt-4;
+  }
+
   .prose-content p {
     @apply text-carbon-300 leading-relaxed mb-4;
   }
@@ -44,6 +48,10 @@
 
   .prose-content ol {
     @apply list-decimal list-inside text-carbon-300 mb-4 space-y-1;
+  }
+
+  .prose-content li {
+    @apply text-carbon-300;
   }
 
   .prose-content blockquote {
@@ -63,27 +71,7 @@
   }
 
   .prose-content hr {
-    @apply border-carbon-700 my-8;
-  }
-
-  .prose-content table {
-    @apply w-full border-collapse my-6;
-  }
-
-  .prose-content thead th {
-    @apply text-left text-white font-semibold px-4 py-3 border-b-2 border-carbon-700 bg-carbon-900;
-  }
-
-  .prose-content tbody td {
-    @apply px-4 py-3 text-carbon-300 border-b border-carbon-800;
-  }
-
-  .prose-content tbody tr:hover {
-    @apply bg-carbon-900/50;
-  }
-
-  .prose-content code {
-    @apply bg-carbon-800 text-racing-400 px-1.5 py-0.5 rounded text-sm;
+    @apply border-carbon-800 my-8;
   }
 
   .prose-content pre {
@@ -91,6 +79,30 @@
   }
 
   .prose-content pre code {
-    @apply bg-transparent px-0 py-0;
+    @apply text-sm text-carbon-200 bg-transparent p-0;
+  }
+
+  .prose-content code {
+    @apply bg-carbon-800 text-racing-400 px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .prose-content table {
+    @apply w-full border-collapse my-6;
+  }
+
+  .prose-content thead {
+    @apply border-b-2 border-carbon-700;
+  }
+
+  .prose-content th {
+    @apply text-left text-white font-semibold px-4 py-3 text-sm uppercase tracking-wider;
+  }
+
+  .prose-content td {
+    @apply text-carbon-300 px-4 py-3 border-b border-carbon-800;
+  }
+
+  .prose-content tbody tr:hover {
+    @apply bg-carbon-900/50;
   }
 }

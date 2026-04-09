@@ -16,16 +16,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Post Not Found' }
   }
 
-  const tags = getTagsArray(post.metadata?.tags)
-  const content = getMetafieldValue(post.metadata?.content)
-  const description = content
-    ? content.replace(/[#*_`\[\]|>\-]/g, '').replace(/\n+/g, ' ').trim().substring(0, 160) + '...'
-    : `Read "${post.title}" on Sports Car Blog.`
-
   return {
     title: `${post.title} | Sports Car Blog`,
-    description,
-    keywords: tags.length > 0 ? tags.join(', ') : undefined,
+    description: getMetafieldValue(post.metadata?.tags) || `Read "${post.title}" on Sports Car Blog.`
   }
 }
 
@@ -43,7 +36,7 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   const rawContent = getMetafieldValue(post.metadata?.content)
-  const htmlContent = await parseMarkdown(rawContent)
+  const content = parseMarkdown(rawContent)
   const tags = getTagsArray(post.metadata?.tags)
   const author = post.metadata?.author
   const category = post.metadata?.category
@@ -122,10 +115,10 @@ export default async function PostPage({ params }: PageProps) {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        {htmlContent ? (
+        {content ? (
           <div
             className="prose-content text-lg leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
+            dangerouslySetInnerHTML={{ __html: content }}
           />
         ) : (
           <p className="text-carbon-400 text-lg">No content available for this post.</p>
