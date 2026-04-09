@@ -61,4 +61,36 @@
   .prose-content em {
     @apply text-carbon-200;
   }
+
+  .prose-content hr {
+    @apply border-carbon-700 my-8;
+  }
+
+  .prose-content table {
+    @apply w-full border-collapse my-6;
+  }
+
+  .prose-content thead th {
+    @apply text-left text-white font-semibold px-4 py-3 border-b-2 border-carbon-700 bg-carbon-900;
+  }
+
+  .prose-content tbody td {
+    @apply px-4 py-3 text-carbon-300 border-b border-carbon-800;
+  }
+
+  .prose-content tbody tr:hover {
+    @apply bg-carbon-900/50;
+  }
+
+  .prose-content code {
+    @apply bg-carbon-800 text-racing-400 px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .prose-content pre {
+    @apply bg-carbon-900 border border-carbon-800 rounded-lg p-4 overflow-x-auto my-6;
+  }
+
+  .prose-content pre code {
+    @apply bg-transparent px-0 py-0;
+  }
 }

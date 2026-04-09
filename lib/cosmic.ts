@@ -1,5 +1,6 @@
 import { createBucketClient } from '@cosmicjs/sdk'
 import { Post, Author, Category, hasStatus } from '@/types'
+import { marked } from 'marked'
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -19,6 +20,25 @@ export function getMetafieldValue(field: unknown): string {
     return String((field as { key: unknown }).key)
   }
   return ''
+}
+
+/**
+ * Get tags as a string array from a multi-select metafield.
+ * Handles both array format (multi-select) and comma-separated string format.
+ */
+export function getTagsArray(field: unknown): string[] {
+  if (field === null || field === undefined) return []
+  if (Array.isArray(field)) return field.map(String).filter(Boolean)
+  if (typeof field === 'string') return field.split(',').map(t => t.trim()).filter(Boolean)
+  return []
+}
+
+/**
+ * Parse markdown content to HTML using marked.
+ */
+export async function parseMarkdown(content: string): Promise<string> {
+  if (!content) return ''
+  return await marked(content)
 }
 
 // Posts

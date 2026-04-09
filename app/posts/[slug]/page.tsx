@@ -2,7 +2,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getPostBySlug, getPosts, getMetafieldValue } from '@/lib/cosmic'
+import { getPostBySlug, getPosts, getMetafieldValue, getTagsArray, parseMarkdown } from '@/lib/cosmic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -16,9 +16,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Post Not Found' }
   }
 
+  const tags = getTagsArray(post.metadata?.tags)
+  const content = getMetafieldValue(post.metadata?.content)
+  const description = content
+    ? content.replace(/[#*_`\[\]|>\-]/g, '').replace(/\n+/g, ' ').trim().substring(0, 160) + '...'
+    : `Read "${post.title}" on Sports Car Blog.`
+
   return {
     title: `${post.title} | Sports Car Blog`,
-    description: getMetafieldValue(post.metadata?.tags) || `Read "${post.title}" on Sports Car Blog.`
+    description,
+    keywords: tags.length > 0 ? tags.join(', ') : undefined,
   }
 }
 
@@ -35,8 +42,9 @@ export default async function PostPage({ params }: PageProps) {
     notFound()
   }
 
-  const content = getMetafieldValue(post.metadata?.content)
-  const tags = getMetafieldValue(post.metadata?.tags)
+  const rawContent = getMetafieldValue(post.metadata?.content)
+  const htmlContent = await parseMarkdown(rawContent)
+  const tags = getTagsArray(post.metadata?.tags)
   const author = post.metadata?.author
   const category = post.metadata?.category
   const featuredImage = post.metadata?.featured_image
@@ -114,31 +122,28 @@ export default async function PostPage({ params }: PageProps) {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        {content ? (
+        {htmlContent ? (
           <div
             className="prose-content text-lg leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
         ) : (
           <p className="text-carbon-400 text-lg">No content available for this post.</p>
         )}
 
         {/* Tags */}
-        {tags && (
+        {tags.length > 0 && (
           <div className="mt-12 pt-8 border-t border-carbon-800">
             <h3 className="text-sm font-semibold text-carbon-400 uppercase tracking-wider mb-4">Tags</h3>
             <div className="flex flex-wrap gap-2">
-              {tags
-                .split(',')
-                .filter(Boolean)
-                .map((tag) => (
-                  <span
-                    key={tag.trim()}
-                    className="px-4 py-2 bg-carbon-900 text-carbon-300 text-sm rounded-lg border border-carbon-800"
-                  >
-                    {tag.trim()}
-                  </span>
-                ))}
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-4 py-2 bg-carbon-900 text-carbon-300 text-sm rounded-lg border border-carbon-800"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         )}

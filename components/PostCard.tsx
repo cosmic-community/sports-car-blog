@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Post } from '@/types'
-import { getMetafieldValue } from '@/lib/cosmic'
+import { getMetafieldValue, getTagsArray } from '@/lib/cosmic'
 
 interface PostCardProps {
   post: Post
@@ -10,7 +10,7 @@ export default function PostCard({ post }: PostCardProps) {
   const featuredImage = post.metadata?.featured_image
   const category = post.metadata?.category
   const author = post.metadata?.author
-  const tags = getMetafieldValue(post.metadata?.tags)
+  const tags = getTagsArray(post.metadata?.tags)
 
   return (
     <Link href={`/posts/${post.slug}`} className="group block">
@@ -44,20 +44,16 @@ export default function PostCard({ post }: PostCardProps) {
           </h3>
 
           {/* Tags */}
-          {tags && (
+          {tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {tags
-                .split(',')
-                .filter(Boolean)
-                .slice(0, 3)
-                .map((tag) => (
-                  <span
-                    key={tag.trim()}
-                    className="px-2 py-0.5 bg-carbon-800 text-carbon-400 text-xs rounded"
-                  >
-                    {tag.trim()}
-                  </span>
-                ))}
+              {tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-0.5 bg-carbon-800 text-carbon-400 text-xs rounded"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           )}
 
